@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @Transactional
 public class PostService {
@@ -23,7 +21,7 @@ public class PostService {
 
 
 
-    public List<Post> getAll() {
+    public Iterable<Post> getAll() {
         return postRepository.findAll();
     }
 
@@ -42,8 +40,7 @@ public class PostService {
         tag.getPostSet().add(post);
         tag1.getPostSet().add(post);
 
-       /* tagRepository.save(tag);
-        tagRepository.save(tag1);*/
+       //Save to repository
         postRepository.save(post);
     }
 }
