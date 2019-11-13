@@ -9,14 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Service
 @Transactional
 public class PostService {
 
-    @Autowired
+    @Autowired(required = true)
     private PostRepository postRepository;
 
-    @Autowired
+    @Autowired(required = true)
     private TagRepository tagRepository;
 
 
@@ -34,13 +37,31 @@ public class PostService {
         Tag tag=new Tag("Tag1");
         Tag tag1=new Tag("Tag2");
 
-        post.getTagSet().add(tag);
-        post.getTagSet().add(tag1);
+        Set<Tag> tagSet=new HashSet<>();
+        tagSet.add(tag);
+        tagSet.add(tag1);
 
-        tag.getPostSet().add(post);
-        tag1.getPostSet().add(post);
+        post.setTags(tagSet);
+
+
+       /* post.getTags().add(tag);
+        post.getTags().add(tag1);*/
+
+       Set<Post> postSet=new HashSet<Post>();
+       postSet.add(post);
+
+       tag.setPosts(postSet);
+
+        /*tag.getPosts().add(post);
+        tag1.getPosts().add(post);*/
 
        //Save to repository
-        postRepository.save(post);
+        try{
+            postRepository.save(post);
+        }
+        catch (Exception e){
+            e.getStackTrace();
+        }
+
     }
 }

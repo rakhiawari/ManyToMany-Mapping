@@ -1,9 +1,8 @@
 package com.innovect.manytomany.models;
 
 
+import com.fasterxml.jackson.annotation.*;
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -20,22 +19,11 @@ public class Post {
     @Column(name = "post_description", nullable = false)
     private String description;
 
-    /*@Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "posted_at", nullable = false)
-    private Date postedAt = new Date();
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "last_updated_at", nullable = false)
-    private Date lastUpdatedAt = new Date();*/
-
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(name = "post_tags", joinColumns = {@JoinColumn(name = "post_id")}, inverseJoinColumns =
             {@JoinColumn(name = "tag_id")})
-    private Set<Tag> tags = new HashSet<>();
+    private Set<Tag> tags;
 
 
     public Post(){}
@@ -69,12 +57,14 @@ public class Post {
     }
 
 
-
-    public Set<Tag> getTagSet() {
+    @JsonManagedReference
+    public Set<Tag> getTags() {
         return tags;
     }
 
-    public void setTagSet(Set<Tag> tagSet) {
-        this.tags = tagSet;
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
     }
+
+
 }
